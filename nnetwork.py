@@ -38,7 +38,7 @@ gameDisplay = pygame.display.set_mode((displayWidth,displayHieght))
 
 pygame.display.set_caption('Nueral Network')
 
-def translate(value, leftMin, leftMax, rightMin, rightMax):
+def translate(value, leftMin, leftMçax, rightMin, rightMax):
     # Figure out how 'wide' each range is
     leftSpan = leftMax - leftMin
     rightSpan = rightMax - rightMin
@@ -134,12 +134,15 @@ class Output(Node):
                     weight = j
                     break
             vals.append(weight.change())
-        if self.balanceType == 'sigmoid':
-            self.val = sigmoid(sum(vals))
-        elif self.balanceType == 'center':
-            self.val = center(sum(vals))
-        elif self.balanceType == None:
-            self.val = sum(vals)
+        val = sum(vals)
+        for i in self.balanceType:
+            if i == 'sigmoid':
+                val = sigmoid(val)
+            elif i == 'pos':
+                val = pos(val)
+            elif i == None:
+                val = val
+        self.val = val
         self.color = pickColor(self.val)
 
 
@@ -229,24 +232,25 @@ class Network:
         self.inputLayer[1].run(translate(data[0][1], 0, 255, -1, 1))
         self.inputLayer[2].run(translate(data[1][1], 0, 255, -1, 1))
         self.inputLayer[3].run(translate(data[1][0], 0, 255, -1, 1))
-        for i in self.inputLayer:
-            print(str(i.id) + ': ' +str(i.val))
-        print()
+        # Commentented out stuff is for debugging
+        # for i in self.inputLayer:
+        #     print(str(i.id) + ': ' +str(i.val))
+        # print()
         for i in self.h1:
             i.run()
-        for i in self.h1:
-            print(str(i.id) + ': ' +str(i.val))
-        print()
+        # for i in self.h1:
+        #     print(str(i.id) + ': ' +str(i.val))
+        # print()
         for i in self.h2:
             i.run()
-        for i in self.h2:
-            print(str(i.id) + ': ' +str(i.val))
-        print()
+        # for i in self.h2:
+        #     print(str(i.id) + ': ' +str(i.val))
+        # print()
         for i in self.outputLayer:
             i.run()
 
-        for i in self.outputLayer:
-            print(i.meaning + ': ' + str(i.val))
+        # for i in self.outputLayer:
+        #     print(i.meaning + ': ' + str(i.val))
 
         
 
